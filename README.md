@@ -61,5 +61,5 @@ task_source: протокол с функцией get_tasks(), общей для
 file_source: источник - файл
 generator_source: источник - генератор
 api_source: источник - имитирование API
-api_source_interactive - источник - ввод пользователя, имитированный под пришедший API
+api_source_interactive - источник - ввод пользователя, имитированный под API
 для уникальности id использовала uuid.uuid4
