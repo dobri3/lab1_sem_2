@@ -35,8 +35,6 @@ class TestGeneratorSource(unittest.TestCase):
     @patch("random.randint")
     def test_returns_different_ids_each_time(self, mock_randint):
         mock_randint.return_value = 3
-
         tasks = GeneratorSource().get_tasks()
         ids = [task.id for task in tasks]
-
         self.assertEqual(len(set(ids)), 3)  # все id разные
