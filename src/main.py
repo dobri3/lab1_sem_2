@@ -1,5 +1,4 @@
 import logging
-from uuid import uuid4
 
 from src.api_source import ApiSource
 from src.api_source_interactive import ApiSourceInteractive
@@ -10,25 +9,33 @@ from src.config import LOGGING_CONFIG
 import logging.config
 
 logging.config.dictConfig(LOGGING_CONFIG)
+logger = logging.getLogger(__name__)
 
-SOURCES = {
-            "API":ApiSource(),
-            "API interact": ApiSourceInteractive(),
-            "file": FileSource("test_file.json"),
-            "generator": GeneratorSource()
-        }
+SOURCES: dict[str, TaskSource] = {
+    "API": ApiSource(),
+    "API interact": ApiSourceInteractive(),
+    "file": FileSource("test_file.json"),
+    "generator": GeneratorSource(),
+}
+
 
 def main() -> None:
     """
     Обязательнная составляющая программ, которые сдаются. Является точкой входа в приложение
     :return: Данная функция ничего не возвращает
     """
-    logger = logging.getLogger(__name__)
-    
+
     ids = []
 
-    while ((f:=input("введите тип источника:\nAPI\nAPI interact\nfile\ngenerator\nor q to quit\n"))!="q"):
-        source = SOURCES.get(f)
+    while (
+        f := input(
+            "введите тип источника:\nAPI\nAPI interact\nfile\ngenerator\nor q to quit\n"
+        )
+    ) != "q":
+        source: TaskSource | None = SOURCES.get(f)
+        if source is None:
+            logger.error(f"неизвестный тип источника: {f}")
+            continue
         if not checkup(source):
             continue
         print("\n")
@@ -41,16 +48,15 @@ def main() -> None:
                 logger.error(f"id {task.id} уже существует")
 
 
-def checkup(source):
-    logger = logging.getLogger(__name__)
-    if not source:
-        logger.error(f"неверный тип источника {source}\n")
-        return False
+def checkup(source) -> bool:
+    """
+    функция для проверки совместимости источника с TaskSource
+    :return: bool
+    """
     if not isinstance(source, TaskSource):
         logger.error(f"источник {source} несовместим с TaskSource\n")
         return False
     return True
-
 
 
 if __name__ == "__main__":

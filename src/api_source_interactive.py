@@ -4,10 +4,13 @@ from src.task import Task
 
 
 class ApiSourceInteractive:
-    def get_tasks(self) ->list[Task]:
+    def get_tasks(self) -> list[Task]:
+        """
+        функция для получения списка тасков от ввода пользователя
+        :return: list[Task]
+        """
         tasks = []
-        while ((f:=input("Введите название задачи (press q to quit) :"))!= "q"):
+        while (f := input("Введите название задачи (press q to quit) :")) != "q":
             task = Task(str(uuid4()), f)
             tasks.append(task)
         return tasks
-

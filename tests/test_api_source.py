@@ -2,6 +2,7 @@ import unittest
 
 from src.api_source import ApiSource
 
+
 class TestApiSource(unittest.TestCase):
     def test_output(self):
         source = ApiSource()
