@@ -22,11 +22,11 @@ class TestFileSource(unittest.TestCase):
 
     @patch("src.file_source.logger")
     @patch("builtins.open")
-    def test_read_file_returns_none_when_file_not_found(self, mock_file, mock_logger):
-        mock_file.side_effect = FileNotFoundError()
+    def test_read_file_returns_none_when_file_not_found(self, mock_open, mock_logger):
+        mock_open.side_effect = FileNotFoundError()
         result = self.file_source.read_file()
         self.assertIsNone(result)
-        mock_logger.assert_called_once_with("file tasks.json not found\n")
+        mock_logger.error.assert_called_once_with("file tasks.json not found\n")
 
     @patch.object(FileSource, "read_file")
     def test_get_tasks_returns_empty_list_when_read_file_returns_none(self, mock_read):
